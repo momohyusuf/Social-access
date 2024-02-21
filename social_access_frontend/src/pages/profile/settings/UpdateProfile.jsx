@@ -114,7 +114,7 @@ const UpdateProfile = () => {
 
       <h3>Social links</h3>
       <section>
-        <div className="flex gap-4 w-full">
+        <div className="flex flex-col md:flex-row gap-4 w-full">
           <InputField
             title={'Phone number'}
             name="phone_number"
@@ -132,7 +132,7 @@ const UpdateProfile = () => {
             placeholder="https://www.facebook.com/username"
           />
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <InputField
             title={'X (formerly Twitter)'}
             name="twitter_link"
@@ -149,7 +149,7 @@ const UpdateProfile = () => {
           />
         </div>
 
-        <div className="flex gap-4 w-full">
+        <div className="flex flex-col md:flex-row gap-4 w-full">
           <InputField
             title={'LinkedIn'}
             name="linkedin_link"
