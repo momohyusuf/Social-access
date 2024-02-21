@@ -28,7 +28,7 @@ const Login = () => {
           color: 'red',
         },
         type: 'error',
-        content: error.response.data.message,
+        content: error.response.data.message || 'Network error try again',
       });
     } finally {
       setLoading(false);
