@@ -27,9 +27,12 @@ const routeNotFound = require('./middleware/noRouteFound');
 
 // Set the port number. If the environment variable `PORT` is set, use that value, otherwise use 3000.
 const port = process.env.PORT || 3000;
-
+const origin =
+  process.env.NODE_ENV === 'production'
+    ? 'https://social-access.vercel.app'
+    : 'http://localhost:5173';
 // Use CORS middleware to enable cross-origin requests.
-app.use(cors({ credentials: true, origin: ['http://localhost:5173'] }));
+app.use(cors({ credentials: true, origin: [origin] }));
 
 // Use Express's built-in JSON parsing middleware.
 app.use(express.json());
