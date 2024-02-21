@@ -41,11 +41,9 @@ const SignUp = () => {
   };
 
   return (
-    <section className="grid place-items-center h-[calc(100vh-100px)]">
+    <section className="grid place-items-center h-[calc(100vh-200px)]">
       {contextHolder}
       <div className="max-w-[500px] bg-white w-full shadow-lg rounded-md p-4">
-        {' '}
-        <h3 className="text-center">Welcome back!</h3>
         <Form
           name="basic"
           initialValues={{

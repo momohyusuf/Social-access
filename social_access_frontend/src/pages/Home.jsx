@@ -8,8 +8,7 @@ const Home = () => {
       <div>
         <h1 className="text-4xl md:text-5xl">Easily Share Your Social Links</h1>
         <p className="text-xl my-12 md:text-2xl text-gray-500">
-          Connect with others easily, Share are your social links within
-          seconds.
+          Connect with others easily, Share your social links within seconds.
         </p>
         <button onClick={() => navigate('/sign-up')} className="button">
           Get started
