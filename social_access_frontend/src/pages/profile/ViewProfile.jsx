@@ -1,7 +1,7 @@
-import React from 'react';
-import { Button, Skeleton, Avatar, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import React from "react";
+import { Button, Skeleton, Avatar, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import {
   FacebookOutlined,
   GithubOutlined,
@@ -12,11 +12,11 @@ import {
   WhatsAppOutlined,
   CopyOutlined,
   TwitterOutlined,
-} from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
-import { baseUrl } from '../../utils/helpers';
-import axios from 'axios';
-import QrCodeModal from './QrCodeModal';
+} from "@ant-design/icons";
+import { useLocation } from "react-router-dom";
+import { baseUrl } from "../../utils/helpers";
+import axios from "axios";
+import QrCodeModal from "./QrCodeModal";
 
 const ViewProfile = () => {
   const [singleUser, setSingleUser] = React.useState(null);
@@ -26,7 +26,7 @@ const ViewProfile = () => {
   const { user } = React.useContext(AuthContext);
   let userId = location.search.slice(1);
   const [messageApi, contextHolder] = message.useMessage();
-  const [urlOrigin, setUrlOrigin] = React.useState('');
+  const [urlOrigin, setUrlOrigin] = React.useState("");
 
   React.useEffect(() => {
     setUrlOrigin(window.location.origin);
@@ -36,11 +36,11 @@ const ViewProfile = () => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(
-        `${urlOrigin}/${singleUser?.name?.replace(/\s+/g, '_')}?${
+        `${urlOrigin}/${singleUser?.name?.replace(/\s+/g, "_")}?${
           singleUser?._id
         }`
       );
-      message.success('Profile link copied successfully');
+      message.success("Profile link copied successfully");
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +67,7 @@ const ViewProfile = () => {
     // Replace with the message you want to send
     let userWhatsAppNumber;
 
-    if (userPhoneNumber.startsWith('+234')) {
+    if (userPhoneNumber.startsWith("+234")) {
       userWhatsAppNumber = userPhoneNumber;
     }
 
@@ -75,7 +75,7 @@ const ViewProfile = () => {
       userWhatsAppNumber = `+234${userPhoneNumber}`;
     }
 
-    if (!userPhoneNumber.startsWith('+234') && userPhoneNumber.length !== 10) {
+    if (!userPhoneNumber.startsWith("+234") && userPhoneNumber.length !== 10) {
       userWhatsAppNumber = `+234${userPhoneNumber.slice(1)}`;
     }
     return `https://wa.me/${userWhatsAppNumber}`;
@@ -94,37 +94,37 @@ const ViewProfile = () => {
             <Skeleton.Image
               active={loading}
               style={{
-                width: '24rem',
-                height: '24rem',
+                width: "24rem",
+                height: "24rem",
               }}
             />
           ) : (
             <Avatar
               src={
                 singleUser?.profile_picture?.url ||
-                'https://th.bing.com/th/id/OIP.pc5acKBwn4ol1rWfu1ETKwHaHW?rs=1&pid=ImgDetMain'
+                "https://th.bing.com/th/id/OIP.pc5acKBwn4ol1rWfu1ETKwHaHW?rs=1&pid=ImgDetMain"
               }
               shape="square"
               // className="w-full h-64 md:w-96 max-w-full rounded-md"
               style={{
-                height: '300px',
-                width: '300px',
+                height: "300px",
+                width: "300px",
               }}
               alt="my profile picture"
             />
           )}
           {loading ? (
-            <Skeleton.Input active={loading} size={'large'} />
+            <Skeleton.Input active={loading} size={"large"} />
           ) : (
             <h1>{singleUser?.name}</h1>
           )}
           {loading ? (
             <div className="mt-2">
-              {' '}
-              <Skeleton.Input active={loading} size={'small'} />
+              {" "}
+              <Skeleton.Input active={loading} size={"small"} />
             </div>
           ) : (
-            <p className="text-gray-500">{singleUser?.profile_bio || 'null'}</p>
+            <p className="text-gray-300">{singleUser?.profile_bio || "null"}</p>
           )}
         </div>
         <div className="flex gap-2">
@@ -138,11 +138,11 @@ const ViewProfile = () => {
           </Button>
         </div>
         <div className="mt-4">
-          {' '}
+          {" "}
           <QrCodeModal
             qrCodeLink={`${urlOrigin}/${singleUser?.name?.replace(
               /\s+/g,
-              '_'
+              "_"
             )}?${singleUser?._id}`}
           />
         </div>
@@ -155,96 +155,96 @@ const ViewProfile = () => {
           {singleUser?.github_link && (
             <SocialLink
               link={singleUser?.github_link}
-              bgColor={'bg-black'}
+              bgColor={"bg-black"}
               icon={
-                <GithubOutlined style={{ fontSize: '2rem', color: 'white' }} />
+                <GithubOutlined style={{ fontSize: "2rem", color: "white" }} />
               }
-              description={'Github profile'}
+              description={"Github profile"}
             />
           )}
 
           {singleUser?.linkedin_link && (
             <SocialLink
               link={singleUser?.linkedin_link}
-              bgColor={'bg-[#40A2E3]'}
+              bgColor={"bg-[#40A2E3]"}
               icon={
                 <LinkedinOutlined
-                  style={{ fontSize: '2rem', color: 'white' }}
+                  style={{ fontSize: "2rem", color: "white" }}
                 />
               }
-              description={'LinkedIn profile'}
+              description={"LinkedIn profile"}
             />
           )}
 
           {singleUser?.twitter_link && (
             <SocialLink
               link={singleUser?.twitter_link}
-              bgColor={'bg-black'}
+              bgColor={"bg-black"}
               icon={
-                <TwitterOutlined style={{ fontSize: '2rem', color: 'white' }} />
+                <TwitterOutlined style={{ fontSize: "2rem", color: "white" }} />
               }
-              description={'Twitter profile'}
+              description={"Twitter profile"}
             />
           )}
 
           {singleUser?.instagram_link && (
             <SocialLink
               link={singleUser?.instagram_link}
-              bgColor={'bg-gradient-to-r from-[#EB0F1D] to-[#9049C6]'}
+              bgColor={"bg-gradient-to-r from-[#EB0F1D] to-[#9049C6]"}
               icon={
                 <InstagramOutlined
-                  style={{ fontSize: '2rem', color: 'white' }}
+                  style={{ fontSize: "2rem", color: "white" }}
                 />
               }
-              description={'Instagram profile'}
+              description={"Instagram profile"}
             />
           )}
 
           {singleUser?.facebook_link && (
             <SocialLink
               link={singleUser?.facebook_link}
-              bgColor={'bg-blue-700'}
+              bgColor={"bg-blue-700"}
               icon={
                 <FacebookOutlined
-                  style={{ fontSize: '2rem', color: 'white' }}
+                  style={{ fontSize: "2rem", color: "white" }}
                 />
               }
-              description={'Facebook profile'}
+              description={"Facebook profile"}
             />
           )}
           {singleUser?.email && (
             <SocialLink
               link={`mailto:${singleUser?.email}`}
               mail
-              bgColor={'bg-white'}
+              bgColor={"bg-white"}
               icon={
-                <MailOutlined style={{ fontSize: '2rem', color: 'black' }} />
+                <MailOutlined style={{ fontSize: "2rem", color: "black" }} />
               }
-              description={'Send a mail'}
+              description={"Send a mail"}
             />
           )}
 
           {singleUser?.phone_number && (
             <SocialLink
               link={`tel:${singleUser?.phone_number}`}
-              bgColor={'bg-green-500'}
+              bgColor={"bg-green-500"}
               icon={
-                <PhoneOutlined style={{ fontSize: '2rem', color: 'white' }} />
+                <PhoneOutlined style={{ fontSize: "2rem", color: "white" }} />
               }
-              description={'Call'}
+              description={"Call"}
             />
           )}
 
           {singleUser?.phone_number && (
             <SocialLink
               link={sendWhatsAppMessage(singleUser?.phone_number)}
-              bgColor={'bg-green-800'}
+              bgColor={"bg-green-800"}
               icon={
                 <WhatsAppOutlined
-                  style={{ fontSize: '2rem', color: 'white' }}
+                  style={{ fontSize: "2rem", color: "white" }}
                 />
               }
-              description={'Text on whatsapp'}
+              description={"Text on whatsapp"}
             />
           )}
         </div>
@@ -262,7 +262,7 @@ const SocialLink = ({ link, icon, description, bgColor, mail }) => {
       rel="noreferrer"
       target="_blank"
       className={`rounded-md ${bgColor} ${
-        mail ? 'text-black' : 'text-white'
+        mail ? "text-black" : "text-white"
       } shadow w-full border-2 justify-center border-gray-200 border-solid flex items-center gap-4 p-2 hover:opacity-50 hover:border-2 hover:border-black transition-all duration-300`}
     >
       <span>{icon}</span>

@@ -1,35 +1,28 @@
 // Require the Express module
-const express = require('express');
+const express = require("express");
 
 // Require the necessary controllers for user authentication
-const { signUpUser, signIn } = require('../controllers/authControllers');
+const { googleAuth } = require("../controllers/authControllers");
 const {
   updateUserProfile,
   getUserProfile,
   deleteUserProfile,
-} = require('../controllers/userController');
-const { authenticationMiddleware } = require('../middleware/authMiddleware');
+} = require("../controllers/userController");
+const { authenticationMiddleware } = require("../middleware/authMiddleware");
 
 // Create an Express router
 const router = express.Router();
 
-// Define a route for user sign up
-router.post(
-  '/sign-up',
-  // Call the signUpUser controller function to handle the sign-up request
-  signUpUser
-);
-
 // Define a route for user sign in
 router.post(
-  '/sign-in',
+  "/google/callback",
   // Call the signIn controller function to handle the sign-in request
-  signIn
+  googleAuth
 );
 
 // Define a route for user sign in
 router.post(
-  '/update-profile',
+  "/update-profile",
   authenticationMiddleware,
   // Call the update controller function to handle the update-user profile request
   updateUserProfile
@@ -37,14 +30,14 @@ router.post(
 
 // Define a route for user sign in
 router.delete(
-  '/',
+  "/",
   authenticationMiddleware,
   // Call the delete controller function to handle the delete user account
   deleteUserProfile
 );
 // Define a route for user sign in
 router.get(
-  '/:userId',
+  "/:userId",
   // Call the update controller function to handle the update-user profile request
   getUserProfile
 );

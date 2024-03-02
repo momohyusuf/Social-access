@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Skeleton, Upload, Avatar } from 'antd';
-import axios from 'axios';
+import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Skeleton, Upload, Avatar } from "antd";
+import axios from "axios";
 
 const UploadProfilePhoto = ({ setUserProfile }) => {
   const [previousImage, setPreviousImage] = useState(null);
@@ -13,11 +13,11 @@ const UploadProfilePhoto = ({ setUserProfile }) => {
     try {
       console.log(newFileList[0]);
       const formData = new FormData();
-      formData.append('file', newFileList[0].originFileObj);
-      formData.append('upload_preset', 'ml_default'); // Replace 'your_cloudinary_upload_preset' with your actual Cloudinary upload preset
+      formData.append("file", newFileList[0].originFileObj);
+      formData.append("upload_preset", "ml_default"); // Replace 'your_cloudinary_upload_preset' with your actual Cloudinary upload preset
 
       const { data } = await axios.post(
-        'https://api.cloudinary.com/v1_1/starkweb/image/upload',
+        "https://api.cloudinary.com/v1_1/starkweb/image/upload",
         formData
       );
       const { public_id, secure_url } = data;
@@ -39,7 +39,7 @@ const UploadProfilePhoto = ({ setUserProfile }) => {
     <button
       style={{
         border: 0,
-        background: 'none',
+        // background: 'none',
       }}
       type="button"
     >
@@ -55,14 +55,16 @@ const UploadProfilePhoto = ({ setUserProfile }) => {
   );
   return (
     <div>
-      <Upload
-        listType="picture-circle"
-        maxCount={1}
-        fileList={fileList}
-        onChange={handleChange}
-      >
-        {fileList.length >= 8 ? null : uploadButton}
-      </Upload>
+      <div className="bg-white w-fit rounded-[50%]">
+        <Upload
+          listType="picture-circle"
+          maxCount={1}
+          fileList={fileList}
+          onChange={handleChange}
+        >
+          {fileList.length >= 8 ? null : uploadButton}
+        </Upload>
+      </div>
       {loading ? (
         <Skeleton.Image active={loading} />
       ) : (
