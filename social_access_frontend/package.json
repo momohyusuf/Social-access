@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
     "antd": "latest",
     "axios": "^1.6.2",
     "country-codes-list": "^1.6.11",

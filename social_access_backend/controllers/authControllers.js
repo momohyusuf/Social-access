@@ -1,106 +1,67 @@
-const CustomError = require('../utils/customError'); // Import the custom error class
-const UserModel = require('../model/userModel'); // Import the user model
-const HTTPSTATUSCODE = require('../utils/httpStatusCodes'); // Import the HTTP status codes
-const { generateJwtToken } = require('../utils/tokens'); // Import the function to generate JWT tokens
-const validator = require('validator').default; // Import the validator library
-const bcrypt = require('bcrypt'); // Import the bcrypt library for password hashing
+const CustomError = require("../utils/customError"); // Import the custom error class
+const UserModel = require("../model/userModel"); // Import the user model
+const HTTPSTATUSCODE = require("../utils/httpStatusCodes"); // Import the HTTP status codes
+const { generateJwtToken } = require("../utils/tokens"); // Import the function to generate JWT tokens
+const validator = require("validator").default; // Import the validator library
+const bcrypt = require("bcrypt"); // Import the bcrypt library for password hashing
+const jwt = require("jsonwebtoken");
 
-const signUpUser = async (req, res) => {
-  // Extract the name, email, and password from the request body
-  const { name, email, password } = req.body;
-
-  // Validate the input
-  if (
-    !name?.trim() || // Check if the name is empty or contains only whitespace
-    !validator?.isEmail(email) || // Check if the email is valid
-    !password?.trim() // Check if the password is provided
-  ) {
-    // If any of the checks fail, throw a custom error
-    res
-      .status(HTTPSTATUSCODE.BAD_REQUEST)
-      .json({ message: 'Please provide the required values' });
-    return;
+const googleAuth = async (req, res) => {
+  // extract the google token
+  const { googleToken } = req.body;
+  // confirm that the google token is provided
+  if (!googleToken) {
+    throw new CustomError(HTTPSTATUSCODE.BAD_REQUEST, "Invalid credentials");
   }
-
-  // Check if a user with the provided email already exists
-  const checkUser = await UserModel.findOne({ email });
-  if (checkUser) {
-    // If a user with the same email exists, throw a custom error
-    res
-      .status(HTTPSTATUSCODE.BAD_REQUEST)
-      .json({ message: `An account with ${email} already exist` });
-    return;
+  // decode the token and extract it's values
+  const decoded = jwt.decode(googleToken);
+  if (!decoded) {
+    throw new CustomError(HTTPSTATUSCODE.BAD_REQUEST, "Invalid credentials");
   }
-
-  // Create a new user with the provided data
-  const newUser = await UserModel.create({
-    name,
-    email,
-    password,
+  const user = await UserModel.findOne({
+    email: { $regex: new RegExp(decoded.email, "i") },
   });
 
-  // Generate a JWT access token for the user
-  const accessToken = await generateJwtToken({
-    userId: newUser._id, // Use the user's ID as the subject of the token
-    name: newUser.name, // Include the user's name in the token payload
-    email: newUser.email, // Include the user's email in the token payload
-  });
+  //   if user already exist, return their already existing credentials
+  if (user) {
+    const userInfo = {
+      userId: user._id, // Use the user's ID as the subject of the token
+      name: user.name, // Include the user's name in the token payload
+      email: user.email, // Include the user's email in the token payload
+    };
 
-  // Send the response with the user's information and the access token
-  res
-    .status(HTTPSTATUSCODE.CREATED) // Set the status code to 201 (Created)
-    .json({ ...newUser._doc, password: undefined, accessToken }); // Send the user's name, email, and the access token in the response body
-};
-
-const signIn = async (req, res) => {
-  // Extract the email and password from the request body
-  const { email, password } = req.body;
-
-  // Validate the input
-  if (!validator.isEmail(email) || !password) {
-    // If any of the checks fail, throw a custom error
-    throw new CustomError(
-      HTTPSTATUSCODE.BAD_REQUEST,
-      'Please provide the required values'
-    );
+    // first create a jsonwebtoken and a refresh token
+    const token = await generateJwtToken(userInfo);
+    // establish a login session
+    return res.status(HTTPSTATUSCODE.OK).json({ user, token });
   }
 
-  // Find the user with the provided email
-  const user = await UserModel.findOne({ email });
+  //   create a new account with for the user
+  const createNewUser = await UserModel.findOneAndUpdate(
+    { email: decoded.email },
+    {
+      name: decoded.name,
+      email: decoded.email,
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
 
-  // If the user does not exist, throw a custom error
-  if (!user) {
-    throw new CustomError(
-      HTTPSTATUSCODE.BAD_REQUEST,
-      'Account not found check your email and password'
-    );
-  }
+  //   information to encrypt in the jsonwebtoken
+  const userInfo = {
+    userId: createNewUser._id,
+    email: createNewUser.email,
+    name: createNewUser.name,
+  };
 
-  // Compare the provided password with the user's hashed password
-  const passwordCorrect = await bcrypt.compare(password, user.password);
-
-  // If the password is incorrect, throw a custom error
-  if (!passwordCorrect) {
-    throw new CustomError(
-      HTTPSTATUSCODE.BAD_REQUEST,
-      'Password or email is incorrect'
-    );
-  }
-
-  // Generate a JWT access token for the user
-  const accessToken = await generateJwtToken({
-    userId: user._id, // Use the user's ID as the subject of the token
-    name: user.name, // Include the user's name in the token payload
-    email: user.email, // Include the user's email in the token payload
-  });
-
-  // Create a user info object to send in the response
-
-  // Send the response with the user's information and the access token
-  res.status(200).json({ ...user._doc, password: undefined, accessToken }); // Send the user's name, user ID, and the access token in the response body
+  // first create a jsonwebtoken
+  const token = await generateJwtToken(userInfo);
+  // establish a login session
+  res.status(HTTPSTATUSCODE.OK).json({ createNewUser, token });
 };
 
 module.exports = {
-  signUpUser,
-  signIn,
+  googleAuth,
 };

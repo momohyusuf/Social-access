@@ -1,18 +1,18 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Input, Button, message } from 'antd';
-import axios from 'axios';
-import React from 'react';
-import { baseUrl } from '../../../utils/helpers';
-import { AuthContext } from '../../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import UploadProfilePhoto from './uploadProfilePhoto';
+import { UserOutlined } from "@ant-design/icons";
+import { Input, Button, message } from "antd";
+import axios from "axios";
+import React from "react";
+import { baseUrl } from "../../../utils/helpers";
+import { AuthContext } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import UploadProfilePhoto from "./uploadProfilePhoto";
 
 const { TextArea } = Input;
 
 const validateInput = (userInfo) => {
   let result;
-  if (!userInfo.name.trim()) {
-    result = 'Please provide your name';
+  if (!userInfo?.name.trim()) {
+    result = "Please provide your name";
   }
   return result;
 };
@@ -44,14 +44,14 @@ const UpdateProfile = () => {
   };
 
   const handleSubmit = async () => {
-    const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
     if (validateInput(userProfile)) {
       messageApi.open({
         style: {
-          color: 'red',
+          color: "red",
         },
-        type: 'error',
+        type: "error",
         content: validateInput(userProfile),
       });
 
@@ -70,10 +70,10 @@ const UpdateProfile = () => {
           },
         }
       );
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem("user", JSON.stringify(response.data));
       setUser(response.data);
       navigate(
-        `/${response.data.name.replace(/\s+/g, '_')}?${response.data._id}`
+        `/${response.data.name.replace(/\s+/g, "_")}?${response.data._id}`
       );
     } catch (error) {
       console.log(error);
@@ -116,16 +116,16 @@ const UpdateProfile = () => {
       <section>
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <InputField
-            title={'Phone number'}
+            title={"Phone number"}
             name="phone_number"
-            addonBefore={'+234'}
+            addonBefore={"+234"}
             handleInput={handleInput}
             defaultValue={user?.phone_number}
             placeholder="+234123456789"
           />
 
           <InputField
-            title={'Facebook'}
+            title={"Facebook"}
             name="facebook_link"
             handleInput={handleInput}
             defaultValue={user?.facebook_link}
@@ -134,14 +134,14 @@ const UpdateProfile = () => {
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <InputField
-            title={'X (formerly Twitter)'}
+            title={"X (formerly Twitter)"}
             name="twitter_link"
             handleInput={handleInput}
             defaultValue={user?.twitter_link}
             placeholder="https://x.com/username"
           />
           <InputField
-            title={'Github'}
+            title={"Github"}
             name="github_link"
             defaultValue={user?.github_link}
             handleInput={handleInput}
@@ -151,14 +151,14 @@ const UpdateProfile = () => {
 
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <InputField
-            title={'LinkedIn'}
+            title={"LinkedIn"}
             name="linkedin_link"
             defaultValue={user?.linkedin_link}
             handleInput={handleInput}
             placeholder="https://www.linkedin.com/in/username"
           />
           <InputField
-            title={'Instagram'}
+            title={"Instagram"}
             name="instagram_link"
             defaultValue={user?.instagram_link}
             handleInput={handleInput}
@@ -193,14 +193,16 @@ const InputField = ({
   return (
     <div className="w-full">
       <p className="font-semibold">{title}</p>
-      <Input
-        size="large"
-        defaultValue={defaultValue}
-        name={name}
-        onChange={handleInput}
-        addonBefore={addonBefore ? addonBefore : 'http://'}
-        placeholder={placeholder}
-      />
+      <div className="bg-white rounded-lg">
+        <Input
+          size="large"
+          defaultValue={defaultValue}
+          name={name}
+          onChange={handleInput}
+          addonBefore={addonBefore ? addonBefore : "http://"}
+          placeholder={placeholder}
+        />
+      </div>
     </div>
   );
 };
