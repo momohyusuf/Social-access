@@ -6,8 +6,10 @@ import App from "./App.jsx";
 import { ConfigProvider } from "antd";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId="356216069827-a1lkq3hcpdmqvt14uhmf3h2n50snro96.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={CLIENT_ID}>
     <AuthContextProvider>
       <BrowserRouter>
         <ConfigProvider
