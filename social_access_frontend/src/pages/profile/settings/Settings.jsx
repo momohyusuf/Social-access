@@ -10,7 +10,6 @@ const Settings = () => {
   const navigate = useNavigate();
   const { user, setUser } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
-  console.log(user);
 
   const handlePageNav = () => {
     const user = JSON.parse(localStorage.getItem("user"));

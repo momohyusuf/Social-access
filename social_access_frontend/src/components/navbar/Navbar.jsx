@@ -49,7 +49,9 @@ const Navbar = () => {
               <Button
                 size="large"
                 onClick={() =>
-                  navigate(`/${user.name.replace(/\s+/g, "_")}?${user.userId}`)
+                  navigate(
+                    `/${user.name.replace(/\s+/g, "_")}?${user.user._id}`
+                  )
                 }
                 // type="text"
               >
