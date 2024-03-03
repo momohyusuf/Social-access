@@ -86,13 +86,13 @@ const ViewProfile = () => {
     getUserInfo();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="grid h-screen place-items-center">
-        <Spin size="large" />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="grid h-screen place-items-center">
+  //       <Spin size="large" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -140,7 +140,7 @@ const ViewProfile = () => {
                 <Skeleton.Input active={loading} size={"small"} />
               </div>
             ) : (
-              <p className="text-gray-300">
+              <p className="text-gray-300 text-center">
                 {singleUser?.profile_bio || "null"}
               </p>
             )}
