@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Skeleton, Avatar, message } from "antd";
+import { Button, Skeleton, Avatar, message, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import {
@@ -86,12 +86,20 @@ const ViewProfile = () => {
     getUserInfo();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="grid h-screen place-items-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
   return (
     <>
       <ProfileSeo
         title={`Social access | ${singleUser?.name}`}
         description={singleUser?.profile_bio}
-        name={singleUser.name}
+        name={singleUser?.name}
         image={singleUser?.profile_picture?.url}
       />
       <section className="container mx-auto flex flex-col md:flex-row my-10 gap-10">
